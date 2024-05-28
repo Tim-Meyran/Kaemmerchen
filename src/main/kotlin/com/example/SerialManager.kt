@@ -7,16 +7,9 @@ import com.fazecast.jSerialComm.SerialPortEvent
 
 class SerialManager {
 
-    var mistifier: Int = 0
-    var light = 0
-    var fan1 = 0
-    var fan2 = 0
-    var pump1 = 0
-    var pump2 = 0
+    private var port: SerialPort? = null
 
-    var port: SerialPort? = null
-    
-    fun open(port: SerialPort) {
+    fun open(port: SerialPort, callback: (arr: State) -> Unit) {
         if (this.port != null && this.port!!.isOpen) {
             return
         }
@@ -32,27 +25,43 @@ class SerialManager {
 
             override fun serialEvent(event: SerialPortEvent) {
                 val newData = event.receivedData
-                println("Received data of size: " + newData.size)
-                for (i in newData.indices)
-                    print(Char(newData[i].toUShort()))
-                println("\n")
+
+                val stringData = newData.toString(Charsets.UTF_8)
+                for (line in stringData.split("\n\r")) {
+                    println("Received line : $line")
+                    val values = line.split(";")
+                    if (values.size != 11) continue
+
+                    val newState = State()
+                    newState.mistifier = values[0].toLong()
+                    newState.light = values[1].toLong()
+                    newState.fan1 = values[2].toLong()
+                    newState.fan2 = values[3].toLong()
+                    newState.pump1 = values[4].toLong()
+                    newState.pump2 = values[5].toLong()
+
+                    newState.temperature = values[6].toLong()
+                    newState.humidity = values[7].toLong()
+                    newState.humiditySoil1 = values[8].toLong()
+                    newState.humiditySoil2 = values[9].toLong()
+                    newState.waterLevel = values[10].toLong()
+                    callback(newState)
+                }
             }
         })
     }
 
-    fun writeOutputs() {
-        var byte: Int = 0
-
-        byte = byte or (mistifier shl 0)
-        byte = byte or (light shl 1)
-        byte = byte or (fan1 shl 2)
-        byte = byte or (fan2 shl 3)
-        byte = byte or (pump1 shl 4)
-        byte = byte or (pump2 shl 5)
+    fun writeOutputs(state: State) {
+        var byte = 0
+        byte = byte or (state.mistifier.toInt() shl 0)
+        byte = byte or (state.light.toInt() shl 1)
+        byte = byte or (state.fan1.toInt() shl 2)
+        byte = byte or (state.fan2.toInt() shl 3)
+        byte = byte or (state.pump1.toInt() shl 4)
+        byte = byte or (state.pump2.toInt() shl 5)
 
         if (port != null && port!!.isOpen) {
             port!!.writeBytes(byteArrayOf(byte.toByte()), 1)
         }
-
     }
 }

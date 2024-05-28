@@ -1,12 +1,10 @@
 package com.example
 
-import com.example.plugins.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.thymeleaf.*
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver
-import org.thymeleaf.templateresolver.FileTemplateResolver
 
 fun main() {
     embeddedServer(

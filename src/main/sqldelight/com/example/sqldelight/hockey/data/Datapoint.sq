@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS Datapoint (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,
   mistifier INTEGER NOT NULL,
   light INTEGER NOT NULL,
   fan1 INTEGER NOT NULL,
@@ -13,8 +13,18 @@ CREATE TABLE IF NOT EXISTS Datapoint (
   soilHumidity2 INTEGER NOT NULL
 );
 
-INSERT OR IGNORE INTO Datapoint (id, mistifier,light,fan1,fan2,pump1,pump2,temperature,humidity,waterLevel,soilHumidity1,soilHumidity2)
-VALUES (1, 0,0,0,0,0,0,0,0,0,0,0);
+CREATE TRIGGER IF NOT EXISTS cleanup_trigger AFTER INSERT ON Datapoint BEGIN
+     DELETE FROM Datapoint WHERE rowid < ((SELECT last_insert_rowid()) - 1000);
+END;
+
+INSERT OR IGNORE INTO Datapoint (mistifier,light,fan1,fan2,pump1,pump2,temperature,humidity,waterLevel,soilHumidity1,soilHumidity2)
+VALUES ( 0,0,0,0,0,0,0,0,0,0,0);
+INSERT OR IGNORE INTO Datapoint (mistifier,light,fan1,fan2,pump1,pump2,temperature,humidity,waterLevel,soilHumidity1,soilHumidity2)
+VALUES ( 1,0,0,0,0,0,0,0,0,0,0);
+INSERT OR IGNORE INTO Datapoint (mistifier,light,fan1,fan2,pump1,pump2,temperature,humidity,waterLevel,soilHumidity1,soilHumidity2)
+VALUES ( 0,1,0,0,0,0,0,0,0,0,0);
+INSERT OR IGNORE INTO Datapoint (mistifier,light,fan1,fan2,pump1,pump2,temperature,humidity,waterLevel,soilHumidity1,soilHumidity2)
+VALUES ( 0,0,1,0,0,0,0,0,0,0,0);
 
 selectAll:
 SELECT *
@@ -26,5 +36,5 @@ FROM Datapoint
 ORDER BY id DESC LIMIT 1;
 
 insert:
-INSERT INTO Datapoint(id, mistifier,light,fan1,fan2,pump1,pump2,temperature,humidity,waterLevel,soilHumidity1,soilHumidity2)
-VALUES (?, ?,?,?,?,?,?,?,?,?,?,?);
+INSERT INTO Datapoint(mistifier,light,fan1,fan2,pump1,pump2,temperature,humidity,waterLevel,soilHumidity1,soilHumidity2)
+VALUES ( ?,?,?,?,?,?,?,?,?,?,?);

@@ -19,6 +19,47 @@ class DiskDatabase {
         return datapointQueries.selectAll().executeAsList()
     }
 
+    fun getLatestState(): State? {
+        val datapointQueries: DatapointQueries = database.datapointQueries
+        val latest = datapointQueries.latest().executeAsOneOrNull() ?: return null
+
+        val state = State()
+        state.mistifier = latest.mistifier
+        state.light = latest.light
+        state.fan1 = latest.fan1
+        state.fan2 = latest.fan2
+        state.pump1 = latest.pump1
+        state.pump2 = latest.pump2
+        state.temperature = latest.temperature
+        state.humidity = latest.humidity
+        state.waterLevel = latest.waterLevel
+        state.humiditySoil1 = latest.soilHumidity1
+        state.humiditySoil2 = latest.soilHumidity2
+
+        return state
+    }
+
+    fun insertNewState(state: State) {
+        val queries = database.datapointQueries
+        //queries.transaction {
+        queries.insert(
+            state.mistifier,
+            state.light,
+            state.fan1,
+            state.fan2,
+            state.pump1,
+            state.pump2,
+            state.temperature,
+            state.humidity,
+            state.waterLevel,
+            state.humiditySoil1,
+            state.humiditySoil2
+        )
+        println("Inserted $state")
+
+        //}
+    }
+
     fun getDataPointsWithName(): Map<String, String> {
         val datapointQueries: DatapointQueries = database.datapointQueries
         val latest = datapointQueries.latest().executeAsOneOrNull()
