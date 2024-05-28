@@ -1,7 +1,9 @@
-name: Build
+name: Release
 
 on:
   push:
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -18,9 +20,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
       - name: Build with Gradle
         run: ./gradlew build distTar distZip
-      - name: Upload build reports
-        uses: actions/upload-artifact@v4
-        if: always()
+      - uses: ncipollo/release-action@v1
         with:
-          name: artifacts
-          path: build/distributions
+          artifacts: "build/distributions/*"
+          bodyFile: "changelog.md"
