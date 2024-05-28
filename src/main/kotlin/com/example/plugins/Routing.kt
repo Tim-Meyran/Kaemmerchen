@@ -1,5 +1,6 @@
 package com.example.plugins
 
+import com.example.CronJob
 import com.example.DiskDatabase
 import com.fazecast.jSerialComm.SerialPort
 import com.github.sarxos.webcam.Webcam
@@ -19,6 +20,8 @@ import javax.imageio.ImageIO
 fun Application.configureRouting() {
 
     val db = DiskDatabase()
+
+    val cronjob = CronJob()
 
     routing {
         get("/") {
