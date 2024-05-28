@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -17,6 +19,8 @@ application {
     val isDevelopment = true //project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
+
+
 
 repositories {
     mavenCentral()
@@ -47,4 +51,12 @@ sqldelight {
             packageName.set("com.example")
         }
     }
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(8))
 }
