@@ -1,12 +1,12 @@
 package com.example
 
 data class State(
-    var mistifier: Long = 0,
-    var light: Long = 0,
-    var fan1: Long = 0,
-    var fan2: Long = 0,
-    var pump1: Long = 0,
-    var pump2: Long = 0,
+    var mistifier: Long? = null,
+    var light: Long? = null,
+    var fan1: Long? = null,
+    var fan2: Long? = null,
+    var pump1: Long? = null,
+    var pump2: Long? = null,
     var temperature: Long = 0,
     var humidity: Long = 0,
     var humiditySoil1: Long = 0,
@@ -17,12 +17,13 @@ data class State(
 ) {
 
     fun setFromOtherState(other: State) {
-        this.mistifier = other.mistifier
-        this.light = other.light
-        this.fan1 = other.fan1
-        this.fan2 = other.fan2
-        this.pump1 = other.pump1
-        this.pump2 = other.pump2
+        other.mistifier?.let { this.mistifier = it }
+        other.light?.let { this.light = it }
+        other.fan1?.let { this.fan1 = it }
+        other.fan2?.let { this.fan2 = it }
+        other.pump1?.let { this.pump1 = it }
+        other.pump2?.let { this.pump2 = it }
+
         this.temperature = other.temperature
         this.humidity = other.humidity
         this.humiditySoil1 = other.humiditySoil1

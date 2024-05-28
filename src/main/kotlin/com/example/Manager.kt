@@ -7,18 +7,21 @@ import java.util.*
 import javax.imageio.ImageIO
 import kotlin.concurrent.scheduleAtFixedRate
 
-class Manager(val state: State) {
+class Manager(private val state: State) {
 
-    val timer = Timer()
-
-    val db = DiskDatabase()
-
-    val serialManager = SerialManager()
+    private val timer = Timer()
+    private val db = DiskDatabase()
+    private val serialManager = SerialManager(this::handleNewSerialState)
 
     init {
+        val comportName: String? = PropertiesReader.getProperty("COM_PORT")
+
         for (port in SerialPort.getCommPorts()) {
-            serialManager.open(port, this::handleNewSerialState)
-            break
+            println("Found Com Port <${port.systemPortName}> - <${port.descriptivePortName}>")
+            if (port.systemPortName.equals(comportName)) {
+                serialManager.open(port)
+                break
+            }
         }
 
         timer.scheduleAtFixedRate(1000, 500) {
@@ -37,7 +40,7 @@ class Manager(val state: State) {
     private fun update() {
         val now = System.currentTimeMillis()
 
-        println("Update $now")
+        //println("Update $now")
         serialManager.writeOutputs(state)
 
         if (state.changed) {
@@ -49,10 +52,11 @@ class Manager(val state: State) {
     private fun captureImage() {
         val webcams = Webcam.getWebcams()
         for (webcam in webcams) {
-            println("found webcam $webcam")
+            //println("found webcam $webcam")
 
-            if (!webcam.isOpen)
-                webcam.open()
+            if (!webcam.isOpen) webcam.open()
+
+            //webcam.setParameters()
 
             webcam.image?.let {
                 val file = File("webcam.png")
@@ -61,7 +65,6 @@ class Manager(val state: State) {
                     val copy = File("webcam_${System.currentTimeMillis()}.png")
                     file.copyTo(copy)
                 }
-
                 ImageIO.write(it, "PNG", file)
             }
         }

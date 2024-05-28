@@ -43,12 +43,12 @@ class DiskDatabase {
         val queries = database.datapointQueries
         //queries.transaction {
         queries.insert(
-            state.mistifier,
-            state.light,
-            state.fan1,
-            state.fan2,
-            state.pump1,
-            state.pump2,
+            state.mistifier ?: 0,
+            state.light ?: 0,
+            state.fan1 ?: 0,
+            state.fan2 ?: 0,
+            state.pump1 ?: 0,
+            state.pump2 ?: 0,
             state.temperature,
             state.humidity,
             state.waterLevel,
