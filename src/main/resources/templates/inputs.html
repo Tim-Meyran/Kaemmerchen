@@ -1,0 +1,19 @@
+<div hx-get="/inputs"
+     hx-trigger="load delay:1s"
+     hx-swap="outerHTML">
+
+    <section>
+        <div style="display: flex; flex-wrap:wrap; align-content:center; gap: 10px;">
+            <!--/*@thymesVar id="inputs" type="kotlin.collections.Map"*/-->
+
+                <article th:each="d: ${data}">
+                    <header>
+                        <span th:text="${d.key}"></span>
+                    </header>
+                    <span th:text="${d.value}"></span>
+                </article>
+
+        </div>
+    </section>
+
+</div>

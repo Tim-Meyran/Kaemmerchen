@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <script src="static/htmx.min.js"></script>
+    <link rel="stylesheet" href="static/css/pico.min.css"/>
+</head>
+<body>
+
+<main class="container">
+    <h1>Kaemmerchen</h1>
+    <article class="htmx-indicator" aria-busy="true"></article>
+
+    <div hx-get="/outputs"
+         hx-trigger="load"
+         hx-swap="outerHTML">
+    </div>
+
+    <div hx-get="/inputs"
+         hx-trigger="load"
+         hx-swap="outerHTML">
+    </div>
+
+    <h2>Players</h2>
+    <div hx-get="/players"
+         hx-trigger="load"
+         hx-swap="outerHTML">
+    </div>
+</main>
+
+</body>
+</html>

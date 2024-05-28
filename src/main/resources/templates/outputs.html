@@ -1,0 +1,36 @@
+<fieldset>
+    <label>
+        <input name="light" type="checkbox" role="switch" hx-post="/set_output" value="1"
+               hx-include="[name='light_hidden']" {{ "checked" if outputs['light'] else "" }}/>
+        <input name="light_hidden" type="hidden" value="0"/>
+        Light
+    </label>
+    <label>
+        <input name="mistifier" type="checkbox" role="switch" hx-post="/set_output" value="1"
+               hx-include="[name='mistifier_hidden']" {{ "checked" if outputs['mistifier'] else "" }}/>
+        <input name="mistifier_hidden" type="hidden" value="0"/>
+        Mistifier
+    </label>
+    <label>
+        <input name="pump1" type="checkbox" role="switch" hx-post="/set_output" value="1"
+               hx-include="[name='pump1_hidden']" {{ "checked" if outputs['pump1'] else "" }}/>
+        <input name="pump1_hidden" type="hidden" value="0"/>
+        Pump 1
+    </label>
+    <label>
+        <input name="pump2" type="checkbox" role="switch" hx-post="/set_output" value="1"
+               hx-include="[name='pump2_hidden']" {{ "checked" if outputs['pump2'] else "" }}/>
+        <input name="pump2_hidden" type="hidden" value="0"/>
+        Pump 2
+    </label>
+    <input name="fan1" type="checkbox" role="switch" hx-post="/set_output" value="1"
+           hx-include="[name='fan1_hidden']" {{ "checked" if outputs['fan1'] else "" }}/>
+    <input name="fan1_hidden" type="hidden" value="0"/>
+    Fan 1
+    </label>
+    <input name="fan2" type="checkbox" role="switch" hx-post="/set_output" value="1"
+           hx-include="[name='fan2_hidden']" {{ "checked" if outputs['fan2'] else "" }}/>
+    <input name="fan2_hidden" type="hidden" value="0"/>
+    Fan 2
+    </label>
+</fieldset>
