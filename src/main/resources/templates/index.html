@@ -11,7 +11,17 @@
 
 <main class="container">
     <h1>Kaemmerchen</h1>
-    <article class="htmx-indicator" aria-busy="true"></article>
+
+    <section style="width:100%">
+        <div style="width:100%; display: flex; flex-wrap:wrap; align-content:center; gap: 10px;">
+            <article style="width:100%">
+                <header>
+                    <span>Webcam</span>
+                </header>
+                <img src="/live-image" alt="Webcam">
+            </article>
+        </div>
+    </section>
 
     <div hx-get="/outputs"
          hx-trigger="load"
@@ -23,8 +33,7 @@
          hx-swap="outerHTML">
     </div>
 
-    <h2>Webcam</h2>
-    <img src="/live-image" alt="Webcam">
+
 </main>
 
 </body>
