@@ -14,7 +14,7 @@ version = "v0.0.3"
 application {
     mainClass.set("com.example.ApplicationKt")
 
-    val isDevelopment: Boolean = true //project.ext.has("development")
+    val isDevelopment = true //project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
