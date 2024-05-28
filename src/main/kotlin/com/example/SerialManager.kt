@@ -1,6 +1,8 @@
 package com.example
 
 import com.fazecast.jSerialComm.SerialPort
+import com.fazecast.jSerialComm.SerialPortEvent
+import com.fazecast.jSerialComm.SerialPortMessageListener
 
 
 class SerialManager(val callback: (State) -> Unit) {
@@ -19,36 +21,27 @@ class SerialManager(val callback: (State) -> Unit) {
 
         if (!port.isOpen) port.openPort()
 
-        Thread {
-            try {
-                while (true) {
-                    while (port.bytesAvailable() == 0) Thread.sleep(20)
-
-                    val readBuffer = ByteArray(port.bytesAvailable())
-                    val numRead: Int = port.readBytes(readBuffer, readBuffer.size)
-                    println("Read $numRead bytes.")
-                    receiveData(readBuffer)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }.start()
-
-        /*port.addDataListener(object : SerialPortDataListener {
+        port.addDataListener(object : SerialPortMessageListener {
             override fun getListeningEvents(): Int {
-                return SerialPort.LISTENING_EVENT_DATA_AVAILABLE
+                return SerialPort.LISTENING_EVENT_DATA_RECEIVED
+            }
+
+            override fun getMessageDelimiter(): ByteArray {
+                return "\r\n".toByteArray(Charsets.UTF_8)
+            }
+
+            override fun delimiterIndicatesEndOfMessage(): Boolean {
+                return true
             }
 
             override fun serialEvent(event: SerialPortEvent) {
-                if (event.eventType != SerialPort.LISTENING_EVENT_DATA_AVAILABLE) return
-                val newData = ByteArray(port.bytesAvailable())
-                val numRead: Int = port.readBytes(newData, newData.size)
-                println("Read $numRead bytes.")
-
-
+                val delimitedMessage = event.receivedData
+                if (delimitedMessage.size > 24) {
+                    //println("Received: ${delimitedMessage.toString(Charsets.UTF_8)}")
+                    receiveData(delimitedMessage)
+                }
             }
-        })*/
-
+        })
 
     }
 
@@ -56,7 +49,7 @@ class SerialManager(val callback: (State) -> Unit) {
         try {
             val stringData = readBuffer.toString(Charsets.UTF_8)
             for (line in stringData.split("\r\n").filter { l -> l.isNotEmpty() }) {
-                println("Received line : $line")
+                //println("Received line : $line")
                 val values = line.split(";")
                 if (values.size != 11) continue
 
@@ -73,11 +66,11 @@ class SerialManager(val callback: (State) -> Unit) {
                 newState.humiditySoil2 = values[9].toLong()
                 newState.waterLevel = values[10].toLong()
 
-                println("Parsed $newState")
+                //println("Parsed $newState")
                 callback(newState)
             }
         } catch (ex: Exception) {
-            ex.printStackTrace()
+            //ex.printStackTrace()
         }
     }
 
@@ -90,10 +83,11 @@ class SerialManager(val callback: (State) -> Unit) {
         byte = byte or ((state.pump1?.toInt() ?: 0) shl 4)
         byte = byte or ((state.pump2?.toInt() ?: 0) shl 5)
 
-        println("Sending ${byte.toByte()}")
+        //println("Sending ${byte.toByte()}")
 
         if (port != null && port!!.isOpen) {
             port!!.writeBytes(byteArrayOf(byte.toByte()), 1)
         }
     }
+
 }

@@ -55,7 +55,7 @@ class DiskDatabase {
             state.humiditySoil1,
             state.humiditySoil2
         )
-        println("Inserted $state")
+        //println("Inserted $state")
 
         //}
     }

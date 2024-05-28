@@ -4,16 +4,13 @@
 
     <section>
         <div style="display: flex; flex-wrap:wrap; align-content:center; gap: 10px;">
-            <!--/*@thymesVar id="inputs" type="kotlin.collections.Map"*/-->
-
-                <article th:each="d: ${data}">
-                    <header>
-                        <span th:text="${d.key}"></span>
-                    </header>
-                    <span th:text="${d.value}"></span>
-                </article>
-
+            <article th:each="d: ${data}"
+                     th:class="${d.value > 0?'pico-color-green-500 pico-background-green-500':'pico-background-pink-600 pico-color-pink-500'}">
+                <header>
+                    <span th:text="${d.key}" th:class="${d.value > 0?'':''}"></span>
+                </header>
+                <span th:text="${d.value}"></span>
+            </article>
         </div>
     </section>
-
 </div>

@@ -14,6 +14,13 @@ class Manager(private val state: State) {
     private val serialManager = SerialManager(this::handleNewSerialState)
 
     init {
+        state.mistifier = 0
+        state.light = 0
+        state.fan1 = 0
+        state.fan2 = 0
+        state.pump1 = 0
+        state.pump2 = 0
+
         val comportName: String? = PropertiesReader.getProperty("COM_PORT")
 
         for (port in SerialPort.getCommPorts()) {
@@ -69,6 +76,6 @@ class Manager(private val state: State) {
             }
         }
 
-        if (webcams.isEmpty()) println("Found no webcam")
+        //if (webcams.isEmpty()) println("Found no webcam")
     }
 }

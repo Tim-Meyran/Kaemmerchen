@@ -1,31 +1,16 @@
 package com.example
 
 import io.ktor.server.application.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
 import io.ktor.server.thymeleaf.*
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver
+import org.thymeleaf.templateresolver.FileTemplateResolver
 
-fun main() {
-    embeddedServer(
-        Netty,
-        port = 80,
-        host = "0.0.0.0",
-        module = Application::module,
-        watchPaths = listOf("com.example")
-    )
-        .start(wait = true)
-}
+fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.module() {
     configureRouting()
     install(Thymeleaf) {
-        setTemplateResolver(ClassLoaderTemplateResolver().apply {
-            prefix = "templates/"
-            suffix = ".html"
-            characterEncoding = "utf-8"
-        })
-        /*println(if (developmentMode) "devMode" else "Release Mode")
+        println(if (developmentMode) "devMode" else "Release Mode")
         setTemplateResolver((if (developmentMode) {
             FileTemplateResolver().apply {
                 cacheManager = null
@@ -38,6 +23,6 @@ fun Application.module() {
         }).apply {
             suffix = ".html"
             characterEncoding = "utf-8"
-        })*/
+        })
     }
 }
