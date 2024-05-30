@@ -1,10 +1,7 @@
 package com.example
 
 import com.fazecast.jSerialComm.SerialPort
-import com.github.sarxos.webcam.Webcam
-import java.io.File
 import java.util.*
-import javax.imageio.ImageIO
 import kotlin.concurrent.scheduleAtFixedRate
 
 class Manager(private val state: State) {
@@ -57,24 +54,20 @@ class Manager(private val state: State) {
     }
 
     private fun captureImage() {
-        val webcams = Webcam.getWebcams()
-        for (webcam in webcams) {
-            //println("found webcam $webcam")
 
-            if (!webcam.isOpen) webcam.open()
+        //println("found webcam $webcam")
 
-            //webcam.setParameters()
 
-            webcam.image?.let {
-                val file = File("webcam.png")
+        /*   webcam.image?.let {
+               val file = File("webcam.png")
 
-                if (file.exists()) {
-                    val copy = File("webcam_${System.currentTimeMillis()}.png")
-                    file.copyTo(copy)
-                }
-                ImageIO.write(it, "PNG", file)
-            }
-        }
+               if (file.exists()) {
+                   val copy = File("webcam_${System.currentTimeMillis()}.png")
+                   file.copyTo(copy)
+               }
+               ImageIO.write(it, "PNG", file)
+           }*/
+
 
         //if (webcams.isEmpty()) println("Found no webcam")
     }

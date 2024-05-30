@@ -33,7 +33,7 @@ dependencies {
     implementation("io.ktor:ktor-server-thymeleaf")
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
-    implementation("com.github.sarxos:webcam-capture:0.3.12")
+    //implementation("com.github.sarxos:webcam-capture:0.3.12")
 
     implementation("com.fazecast:jSerialComm:[2.0.0,3.0.0)")
 
@@ -51,12 +51,4 @@ sqldelight {
             packageName.set("com.example")
         }
     }
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-}
-
-java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(8))
 }
