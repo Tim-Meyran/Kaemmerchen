@@ -1,7 +1,9 @@
 package com.example
 
 import com.fazecast.jSerialComm.SerialPort
+import java.io.File
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.concurrent.scheduleAtFixedRate
 
 class Manager(private val state: State) {
@@ -35,6 +37,10 @@ class Manager(private val state: State) {
         timer.scheduleAtFixedRate(1000, 60_000) {
             captureImage()
         }
+
+        timer.scheduleAtFixedRate(1000, 60_000) {
+            db.insertNewState(state)
+        }
     }
 
     private fun handleNewSerialState(newState: State) {
@@ -48,27 +54,23 @@ class Manager(private val state: State) {
         serialManager.writeOutputs(state)
 
         if (state.changed) {
-            db.insertNewState(state)
             state.changed = false
         }
     }
 
     private fun captureImage() {
+        val captureCmd: String? = PropertiesReader.getProperty("CAPTURE_CMD")
 
-        //println("found webcam $webcam")
+        captureCmd?.let {
+            println("Executing $it")
+            val p: Process = Runtime.getRuntime().exec(it)
+            p.waitFor(15, TimeUnit.SECONDS)
 
-
-        /*   webcam.image?.let {
-               val file = File("webcam.png")
-
-               if (file.exists()) {
-                   val copy = File("webcam_${System.currentTimeMillis()}.png")
-                   file.copyTo(copy)
-               }
-               ImageIO.write(it, "PNG", file)
-           }*/
-
-
-        //if (webcams.isEmpty()) println("Found no webcam")
+            val imageFile = File("webcam.png")
+            if (imageFile.exists()) {
+                File("timelapse").mkdirs()
+                imageFile.copyTo(File("timelapse/image${System.currentTimeMillis()}.png"))
+            }
+        }
     }
 }
