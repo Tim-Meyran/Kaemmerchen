@@ -59,6 +59,9 @@ class Manager(private val state: State) {
     }
 
     private fun captureImage() {
+        if (state.light == 0L)
+            return
+
         val captureCmd: String? = PropertiesReader.getProperty("CAPTURE_CMD")
 
         captureCmd?.let {
@@ -69,7 +72,7 @@ class Manager(private val state: State) {
             val imageFile = File("webcam.png")
             if (imageFile.exists()) {
                 File("timelapse").mkdirs()
-                imageFile.copyTo(File("timelapse/image${System.currentTimeMillis()}.png"))
+                imageFile.copyTo(File("timelapse/image_${System.currentTimeMillis()}.png"))
             }
         }
     }

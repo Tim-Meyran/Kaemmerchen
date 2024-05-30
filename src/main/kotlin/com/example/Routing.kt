@@ -27,7 +27,7 @@ fun Application.configureRouting() {
         }
 
         get("/outputs") {
-            call.respond(ThymeleafContent("outputs", mapOf("data" to state.getDataPointsWithName())))
+            call.respond(ThymeleafContent("outputs", mapOf("data" to state)))
         }
 
         post("/set_output") {

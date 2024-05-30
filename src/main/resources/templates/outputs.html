@@ -1,27 +1,27 @@
 <section>
+    <!--/*@thymesVar id="data" type="com.example.State"*/-->
     <div style="display: flex; flex-wrap:wrap; align-content:center; gap: 10px;">
         <article>
             <label>
-                <input name="light" type="checkbox" role="switch" hx-post="/set_output" value="1"
-                       hx-include="[name='light_hidden']" {{ "checked" if outputs['light'] else "" }}/>
-                <input name="light_hidden" type="hidden" value="0"/>
-                Light
-            </label>
-        </article>
-
-        <article>
-            <label>
                 <input name="mistifier" type="checkbox" role="switch" hx-post="/set_output" value="1"
-                       hx-include="[name='mistifier_hidden']" {{ "checked" if outputs['mistifier'] else "" }}/>
+                       hx-include="[name='mistifier_hidden']" th:checked="${data.mistifier > 0}"/>
                 <input name="mistifier_hidden" type="hidden" value="0"/>
                 Mistifier
             </label>
         </article>
+        <article>
+            <label>
 
+                <input name="light" type="checkbox" role="switch" hx-post="/set_output" value="1"
+                       hx-include="[name='light_hidden']" th:checked="${data.light > 0}"/>
+                <input name="light_hidden" type="hidden" value="0"/>
+                Light
+            </label>
+        </article>
         <article>
             <label>
                 <input name="pump1" type="checkbox" role="switch" hx-post="/set_output" value="1"
-                       hx-include="[name='pump1_hidden']" {{ "checked" if outputs['pump1'] else "" }}/>
+                       hx-include="[name='pump1_hidden']" th:checked="${data.pump1 > 0}"/>
                 <input name="pump1_hidden" type="hidden" value="0"/>
                 Pump 1
             </label>
@@ -30,7 +30,7 @@
         <article>
             <label>
                 <input name="pump2" type="checkbox" role="switch" hx-post="/set_output" value="1"
-                       hx-include="[name='pump2_hidden']" {{ "checked" if outputs['pump2'] else "" }}/>
+                       hx-include="[name='pump2_hidden']" th:checked="${data.pump2 > 0}"/>
                 <input name="pump2_hidden" type="hidden" value="0"/>
                 Pump 2
             </label>
@@ -38,7 +38,7 @@
 
         <article>
             <input name="fan1" type="checkbox" role="switch" hx-post="/set_output" value="1"
-                   hx-include="[name='fan1_hidden']" {{ "checked" if outputs['fan1'] else "" }}/>
+                   hx-include="[name='fan1_hidden']" th:checked="${data.fan1 > 0}"/>
             <input name="fan1_hidden" type="hidden" value="0"/>
             Fan 1
             </label>
@@ -46,7 +46,7 @@
 
         <article>
             <input name="fan2" type="checkbox" role="switch" hx-post="/set_output" value="1"
-                   hx-include="[name='fan2_hidden']" {{ "checked" if outputs['fan2'] else "" }}/>
+                   hx-include="[name='fan2_hidden']" th:checked="${data.fan2 > 0}"/>
             <input name="fan2_hidden" type="hidden" value="0"/>
             Fan 2
             </label>
