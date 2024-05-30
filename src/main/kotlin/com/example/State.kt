@@ -1,5 +1,9 @@
 package com.example
 
+import kotlinx.serialization.Required
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class State(
     var mistifier: Long? = null,
     var light: Long? = null,
@@ -7,13 +11,14 @@ data class State(
     var fan2: Long? = null,
     var pump1: Long? = null,
     var pump2: Long? = null,
-    var temperature: Long = 0,
-    var humidity: Long = 0,
-    var humiditySoil1: Long = 0,
-    var humiditySoil2: Long = 0,
-    var waterLevel: Long = 0,
 
-    var automaticMode: Long = 0,
+    @Required var temperature: Long = 0,
+    @Required var humidity: Long = 0,
+    @Required var humiditySoil1: Long = 0,
+    @Required var humiditySoil2: Long = 0,
+    @Required var waterLevel: Long = 0,
+    @Required var automaticMode: Long = 0,
+
     var changed: Boolean = false
 ) {
 

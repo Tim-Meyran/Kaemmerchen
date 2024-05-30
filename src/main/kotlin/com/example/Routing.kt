@@ -7,6 +7,8 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.thymeleaf.*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.io.File
 import kotlin.math.max
 
@@ -68,6 +70,11 @@ fun Application.configureRouting() {
                     .toString()
             )
             call.respondFile(file)
+        }
+
+        get("/state") {
+            val json = Json.encodeToString(state)
+            call.respondText(json)
         }
 
         staticResources("/static", "static")

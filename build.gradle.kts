@@ -6,6 +6,7 @@ val logback_version: String by project
 
 plugins {
     kotlin("jvm") version "1.9.22"
+    kotlin("plugin.serialization") version "2.0.0"
     id("io.ktor.plugin") version "2.3.7"
     id("app.cash.sqldelight") version "2.0.2"
 }
@@ -32,6 +33,8 @@ dependencies {
     implementation("io.ktor:ktor-server-html-builder")
     implementation("io.ktor:ktor-server-thymeleaf")
     implementation("ch.qos.logback:logback-classic:$logback_version")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
     //implementation("com.github.sarxos:webcam-capture:0.3.12")
 
