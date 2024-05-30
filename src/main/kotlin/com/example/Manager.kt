@@ -40,7 +40,7 @@ class Manager(private val state: State) {
             updateOutputs()
         }
 
-        timer.scheduleAtFixedRate(1000, 60_000) {
+        timer.scheduleAtFixedRate(1000, 10 * 60_000) {
             captureImage()
         }
 
