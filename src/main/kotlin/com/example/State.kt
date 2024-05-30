@@ -13,6 +13,7 @@ data class State(
     var humiditySoil2: Long = 0,
     var waterLevel: Long = 0,
 
+    var automaticMode: Long = 0,
     var changed: Boolean = false
 ) {
 
@@ -44,7 +45,8 @@ data class State(
             "Humidity" to "$humidity",
             "WaterLevel" to "$waterLevel",
             "Soil Humidity 1" to "$humiditySoil1",
-            "Soil Humidity 2" to "$humiditySoil2"
+            "Soil Humidity 2" to "$humiditySoil2",
+            "Automatic Mode" to "$automaticMode",
         )
     }
 }

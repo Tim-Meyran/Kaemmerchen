@@ -53,7 +53,8 @@ class DiskDatabase {
             state.humidity,
             state.waterLevel,
             state.humiditySoil1,
-            state.humiditySoil2
+            state.humiditySoil2,
+            state.automaticMode
         )
         //println("Inserted $state")
 

@@ -49,6 +49,7 @@ fun Application.configureRouting() {
                     "fan2" -> state.fan2 = newStateEntry.value
                     "pump1" -> state.pump1 = newStateEntry.value
                     "pump2" -> state.pump2 = newStateEntry.value
+                    "automaticMode" -> state.automaticMode = newStateEntry.value
                 }
                 state.changed = true
             }

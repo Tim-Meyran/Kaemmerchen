@@ -2,6 +2,7 @@ package com.example
 
 import com.fazecast.jSerialComm.SerialPort
 import java.io.File
+import java.time.LocalDateTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.scheduleAtFixedRate
@@ -30,8 +31,13 @@ class Manager(private val state: State) {
             }
         }
 
+
+        timer.scheduleAtFixedRate(1000, 30_00) {
+            updateAutomatic()
+        }
+
         timer.scheduleAtFixedRate(1000, 500) {
-            update()
+            updateOutputs()
         }
 
         timer.scheduleAtFixedRate(1000, 60_000) {
@@ -43,11 +49,19 @@ class Manager(private val state: State) {
         }
     }
 
+    private fun updateAutomatic() {
+        if (state.automaticMode == 0L)
+            return
+
+        val currentDateTime = LocalDateTime.now()
+        state.light = if (currentDateTime.hour >= 6) 1L else 0L
+    }
+
     private fun handleNewSerialState(newState: State) {
         state.setFromOtherState(newState)
     }
 
-    private fun update() {
+    private fun updateOutputs() {
         val now = System.currentTimeMillis()
 
         //println("Update $now")

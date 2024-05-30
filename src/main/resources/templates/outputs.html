@@ -51,5 +51,13 @@
             Fan 2
             </label>
         </article>
+
+        <article>
+            <input name="automaticMode" type="checkbox" role="switch" hx-post="/set_output" value="1"
+                   hx-include="[name='automaticMode_hidden']" th:checked="${data.automaticMode > 0}"/>
+            <input name="automaticMode_hidden" type="hidden" value="0"/>
+            Automatic
+            </label>
+        </article>
     </div>
 </section>
