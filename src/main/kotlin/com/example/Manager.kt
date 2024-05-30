@@ -38,6 +38,11 @@ class Manager(private val state: State) {
 
         timer.scheduleAtFixedRate(1000, 500) {
             updateOutputs()
+
+            if (state.takeImageNow) {
+                state.takeImageNow = false
+                captureImage()
+            }
         }
 
         timer.scheduleAtFixedRate(1000, 10 * 60_000) {

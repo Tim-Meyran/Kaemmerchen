@@ -19,7 +19,8 @@ data class State(
     @Required var waterLevel: Long = 0,
     @Required var automaticMode: Long = 0,
 
-    var changed: Boolean = false
+    var changed: Boolean = false,
+    var takeImageNow: Boolean = false
 ) {
 
     fun setFromOtherState(other: State) {

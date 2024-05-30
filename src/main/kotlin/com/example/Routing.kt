@@ -24,12 +24,23 @@ fun Application.configureRouting() {
             call.respond(ThymeleafContent("index", mapOf()))
         }
 
+        get("/webcam") {
+            call.respond(ThymeleafContent("webcam", mapOf()))
+        }
+
         get("/inputs") {
             call.respond(ThymeleafContent("inputs", mapOf("data" to state.getDataPointsWithName())))
         }
 
         get("/outputs") {
             call.respond(ThymeleafContent("outputs", mapOf("data" to state)))
+        }
+
+        post("/take-image") {
+            state.takeImageNow = true
+            println("takeImageNow")
+            call.respondRedirect("/")
+            //call.response.status(HttpStatusCode.OK)
         }
 
         post("/set_output") {

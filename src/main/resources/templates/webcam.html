@@ -1,0 +1,18 @@
+<div hx-get="/webcam"
+     hx-trigger="load delay:10s"
+     hx-swap="outerHTML">
+
+    <section style="width:100%">
+        <div style="width:100%; display: flex; flex-wrap:wrap; align-content:center; gap: 10px;">
+            <article style="width:100%">
+                <header>
+                    <img src="/live-image" alt="Webcam">
+                </header>
+
+                <form action="/take-image" method="post">
+                    <button name="take" value="image">Take Image</button>
+                </form>
+            </article>
+        </div>
+    </section>
+</div>
