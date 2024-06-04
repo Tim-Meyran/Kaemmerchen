@@ -6,6 +6,7 @@ import java.time.LocalDateTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.scheduleAtFixedRate
+import kotlin.io.path.getLastModifiedTime
 
 class Manager(private val state: State) {
 
@@ -31,8 +32,7 @@ class Manager(private val state: State) {
             }
         }
 
-
-        timer.scheduleAtFixedRate(1000, 30_00) {
+        timer.scheduleAtFixedRate(1000, 5_000) {
             updateAutomatic()
         }
 
@@ -49,17 +49,44 @@ class Manager(private val state: State) {
             captureImage()
         }
 
+        timer.scheduleAtFixedRate(60_000, 24 * 60 * 60_000) {
+            createTimelapse()
+        }
+
         timer.scheduleAtFixedRate(1000, 60_000) {
             db.insertNewState(state)
         }
     }
 
+    private fun createTimelapse() {
+        val directory = File("timelapse")
+        directory.mkdir()
+
+        val imageFileList = File("timelapse/image-list.txt")
+        if (!imageFileList.exists()) imageFileList.createNewFile()
+
+        imageFileList.writeText("")
+
+        val files = directory.listFiles()?.filter { it.isFile }
+        files?.filter { it.isFile && it.name.endsWith(".png") }?.sortedBy { it.toPath().getLastModifiedTime() }
+            ?.forEach { file ->
+                imageFileList.appendText("file '${file.name}'\n")
+            } ?: println("No files found or directory does not exist.")
+
+
+        val timelapseCmd: String? = PropertiesReader.getProperty("TIMELAPSE_CMD")
+        timelapseCmd?.let {
+            val p: Process = Runtime.getRuntime().exec(it)
+            p.waitFor(240, TimeUnit.SECONDS)
+        }
+    }
+
     private fun updateAutomatic() {
-        if (state.automaticMode == 0L)
-            return
+        if (state.automaticMode == 0L) return
 
         val currentDateTime = LocalDateTime.now()
         state.light = if (currentDateTime.hour >= 6) 1L else 0L
+
     }
 
     private fun handleNewSerialState(newState: State) {
@@ -78,8 +105,7 @@ class Manager(private val state: State) {
     }
 
     private fun captureImage() {
-        if (state.light == 0L)
-            return
+        if (state.light == 0L) return
 
         val captureCmd: String? = PropertiesReader.getProperty("CAPTURE_CMD")
 

@@ -62,8 +62,8 @@ class SerialManager(val callback: (State) -> Unit) {
 
                 newState.temperature = values[6].toLong()
                 newState.humidity = values[7].toLong()
-                newState.humiditySoil1 = values[8].toLong()
-                newState.humiditySoil2 = values[9].toLong()
+                newState.humiditySoil1 = (100.0 * (1.0 - (values[8].toDouble() / 1024.0))).toLong()
+                newState.humiditySoil2 = (100.0 * (1.0 - (values[9].toDouble() / 1024.0))).toLong()
                 newState.waterLevel = values[10].toLong()
 
                 //println("Parsed $newState")
