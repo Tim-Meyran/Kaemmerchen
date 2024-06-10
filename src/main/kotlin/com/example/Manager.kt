@@ -36,6 +36,10 @@ class Manager(private val state: State) {
             updateAutomatic()
         }
 
+        timer.scheduleAtFixedRate(1000, 60 * 60 * 1_000) {
+            updatePumps()
+        }
+
         timer.scheduleAtFixedRate(1000, 500) {
             updateOutputs()
 
@@ -86,7 +90,16 @@ class Manager(private val state: State) {
 
         val currentDateTime = LocalDateTime.now()
         state.light = if (currentDateTime.hour >= 6) 1L else 0L
+    }
 
+    private fun updatePumps() {
+        if (state.automaticMode == 0L) return
+
+        if (state.humiditySoil2 < 65) {
+            state.pump2 = 1
+            Thread.sleep(5000)
+            state.pump2 = 0
+        }
     }
 
     private fun handleNewSerialState(newState: State) {
