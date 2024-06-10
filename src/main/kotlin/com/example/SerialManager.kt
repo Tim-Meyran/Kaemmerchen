@@ -23,7 +23,12 @@ class SerialManager(val callback: (State) -> Unit) {
         this.port = port
         port.setBaudRate(57600)
 
-        if (!port.isOpen) port.openPort()
+        if (!port.isOpen) {
+            if (port.openPort())
+                log.info("Successfully opened port $port")
+            else
+                log.info("Error opening port $port")
+        }
 
         port.addDataListener(object : SerialPortMessageListener {
             override fun getListeningEvents(): Int {
@@ -52,7 +57,7 @@ class SerialManager(val callback: (State) -> Unit) {
     private fun receiveData(readBuffer: ByteArray) {
         try {
             val stringData = readBuffer.toString(Charsets.UTF_8)
-            log.debug("Received serial line <{}>", stringData)
+            log.trace("Received serial line <{}>", stringData.replace("\r\n", ""))
             receiveLine(stringData)
         } catch (ex: Exception) {
             log.error(ex)
@@ -61,7 +66,7 @@ class SerialManager(val callback: (State) -> Unit) {
 
     fun receiveLine(stringLine: String) {
         try {
-            log.debug("Received serial line <{}>", stringLine)
+            log.trace("Received serial line <{}>", stringLine.replace("\r\n", ""))
             for (line in stringLine.split("\r\n").filter { l -> l.isNotEmpty() }) {
                 //println("Received line : $line")
                 val values = line.split(";")
@@ -81,6 +86,7 @@ class SerialManager(val callback: (State) -> Unit) {
                 newState.waterLevel = values[10].toLong()
 
                 //println("Parsed $newState")
+                log.trace("parsed state <{}>", stringLine)
                 callback(newState)
             }
         } catch (ex: Exception) {

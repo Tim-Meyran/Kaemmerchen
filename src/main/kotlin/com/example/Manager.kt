@@ -37,6 +37,8 @@ class Manager(private val state: State) {
 
         timer.scheduleAtFixedRate(1000, 5_000) {
             updateAutomatic()
+
+            //serialManager.receiveLine("0;0;0;0;0;0;27;75;145;341;1\r\n")
         }
 
         timer.scheduleAtFixedRate(1000, 60 * 60 * 1_000) {
@@ -131,13 +133,13 @@ class Manager(private val state: State) {
         if (state.light == 0L) return
 
         log.info("Capture Image")
-
         val captureCmd: String? = PropertiesReader.getProperty("CAPTURE_CMD")
 
         captureCmd?.let {
-            println("Executing $it")
+            log.debug("Executing $it")
             val p: Process = Runtime.getRuntime().exec(it)
             p.waitFor(15, TimeUnit.SECONDS)
+                .let { successful -> log.info("Capture {}", if (successful) "successful" else " not successful") }
 
             val imageFile = File("webcam.png")
             if (imageFile.exists()) {
