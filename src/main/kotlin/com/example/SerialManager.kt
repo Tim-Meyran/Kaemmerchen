@@ -18,7 +18,7 @@ class SerialManager(val callback: (State) -> Unit) {
             return
         }
 
-        println("Opening com port $port")
+        log.info("Opening com port $port")
 
         this.port = port
         port.setBaudRate(57600)
@@ -52,7 +52,17 @@ class SerialManager(val callback: (State) -> Unit) {
     private fun receiveData(readBuffer: ByteArray) {
         try {
             val stringData = readBuffer.toString(Charsets.UTF_8)
-            for (line in stringData.split("\r\n").filter { l -> l.isNotEmpty() }) {
+            log.debug("Received serial line <{}>", stringData)
+            receiveLine(stringData)
+        } catch (ex: Exception) {
+            log.error(ex)
+        }
+    }
+
+    fun receiveLine(stringLine: String) {
+        try {
+            log.debug("Received serial line <{}>", stringLine)
+            for (line in stringLine.split("\r\n").filter { l -> l.isNotEmpty() }) {
                 //println("Received line : $line")
                 val values = line.split(";")
                 if (values.size != 11) continue
@@ -66,8 +76,8 @@ class SerialManager(val callback: (State) -> Unit) {
 
                 newState.temperature = values[6].toLong()
                 newState.humidity = values[7].toLong()
-                newState.humiditySoil1 = (100.0 * (1.0 - (values[8].toLong().toDouble() / 1024.0))).toLong()
-                newState.humiditySoil2 = (100.0 * (1.0 - (values[9].toLong().toDouble() / 1024.0))).toLong()
+                newState.humiditySoil1 = (100.0 * (1.0 - (values[8].toLong() / 1024.0))).toLong()
+                newState.humiditySoil2 = (100.0 * (1.0 - (values[9].toLong() / 1024.0))).toLong()
                 newState.waterLevel = values[10].toLong()
 
                 //println("Parsed $newState")

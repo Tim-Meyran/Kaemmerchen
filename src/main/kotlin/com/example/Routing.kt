@@ -9,6 +9,7 @@ import io.ktor.server.routing.*
 import io.ktor.server.thymeleaf.*
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.slf4j.LoggerFactory
 import java.io.File
 import kotlin.math.max
 
@@ -18,6 +19,8 @@ fun Application.configureRouting() {
     val state = State()
 
     val manager = Manager(state)
+
+    val log = LoggerFactory.getLogger("Router");
 
     routing {
         get("/") {
@@ -49,7 +52,7 @@ fun Application.configureRouting() {
 
         post("/take-image") {
             state.takeImageNow = true
-            println("takeImageNow")
+            log.info("takeImageNow")
             call.respondRedirect("/")
             //call.response.status(HttpStatusCode.OK)
         }
@@ -77,6 +80,9 @@ fun Application.configureRouting() {
                 }
                 state.changed = true
             }
+            log.info("set_output <{}>", state)
+
+            call.respondRedirect("/")
         }
 
         get("/live-image") {
