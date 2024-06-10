@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <script src="static/htmx.min.js"></script>
+    <link rel="stylesheet" href="static/style.css"/>
+    <link rel="stylesheet" href="static/css/pico.min.css"/>
+    <link rel="stylesheet" href="static/css/pico.colors.min.css"/>
+</head>
+<body>
+
+<main class="container" style="height:100%">
+    <h1>Logging</h1>
+
+    <form action="/">
+        <input type="submit" value="Back"/>
+    </form>
+
+        <!--/*@thymesVar id="log" type="kotlin.String"*/-->
+
+        <div th:each="line: ${lines}">
+            <p th:text="${line}"></p>
+        </div>
+
+
+</main>
+
+</body>
+</html>

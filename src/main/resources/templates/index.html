@@ -12,12 +12,6 @@
 <main class="container">
     <h1>Kaemmerchen</h1>
 
-
-    <div hx-get="/webcam"
-         hx-trigger="load"
-         hx-swap="outerHTML">
-    </div>
-
     <div hx-get="/outputs"
          hx-trigger="load"
          hx-swap="outerHTML">
@@ -28,8 +22,20 @@
          hx-swap="outerHTML">
     </div>
 
+    <div hx-get="/webcam"
+         hx-trigger="load"
+         hx-swap="outerHTML">
+    </div>
+
 
 </main>
+
+<footer class="container">
+    <form action="/logging">
+        <input type="submit" value="Logs" />
+    </form>
+</footer>
+
 
 </body>
 </html>

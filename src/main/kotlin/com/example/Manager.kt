@@ -1,6 +1,7 @@
 package com.example
 
 import com.fazecast.jSerialComm.SerialPort
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.time.LocalDateTime
 import java.util.*
@@ -13,6 +14,8 @@ class Manager(private val state: State) {
     private val timer = Timer()
     private val db = DiskDatabase()
     private val serialManager = SerialManager(this::handleNewSerialState)
+
+    val log = LoggerFactory.getLogger("Manager");
 
     init {
         state.mistifier = 0
@@ -86,10 +89,14 @@ class Manager(private val state: State) {
     }
 
     private fun updateAutomatic() {
+        log.debug("updateAutomatic State <{}>", state)
         if (state.automaticMode == 0L) return
 
         val currentDateTime = LocalDateTime.now()
+        val oldLight = state.light
         state.light = if (currentDateTime.hour >= 6) 1L else 0L
+        if (oldLight != state.light)
+            log.info("update light - State <{}>", state)
     }
 
     private fun updatePumps() {
@@ -97,7 +104,10 @@ class Manager(private val state: State) {
 
         if (state.humiditySoil2 < 65) {
             state.pump2 = 1
+            log.info("Start Pump - State <{}>", state)
+
             Thread.sleep(5000)
+            log.info("Stop Pump - State <{}>", state)
             state.pump2 = 0
         }
     }
@@ -119,6 +129,8 @@ class Manager(private val state: State) {
 
     private fun captureImage() {
         if (state.light == 0L) return
+
+        log.info("Capture Image")
 
         val captureCmd: String? = PropertiesReader.getProperty("CAPTURE_CMD")
 

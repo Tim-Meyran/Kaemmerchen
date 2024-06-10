@@ -36,6 +36,17 @@ fun Application.configureRouting() {
             call.respond(ThymeleafContent("outputs", mapOf("data" to state)))
         }
 
+        get("/logging") {
+
+            val logFile = File("kaemmerchen.log")
+            var logText = listOf<String>()
+            if (logFile.exists()) {
+                logText = logFile.readLines()
+            }
+            call.respond(ThymeleafContent("logging", mapOf("lines" to logText)))
+
+        }
+
         post("/take-image") {
             state.takeImageNow = true
             println("takeImageNow")

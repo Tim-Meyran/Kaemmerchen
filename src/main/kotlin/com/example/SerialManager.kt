@@ -3,11 +3,15 @@ package com.example
 import com.fazecast.jSerialComm.SerialPort
 import com.fazecast.jSerialComm.SerialPortEvent
 import com.fazecast.jSerialComm.SerialPortMessageListener
+import io.ktor.util.logging.*
+import org.slf4j.LoggerFactory
 
 
 class SerialManager(val callback: (State) -> Unit) {
 
     private var port: SerialPort? = null
+
+    val log = LoggerFactory.getLogger("SerialManager");
 
     fun open(port: SerialPort) {
         if (this.port != null && this.port!!.isOpen) {
@@ -62,15 +66,15 @@ class SerialManager(val callback: (State) -> Unit) {
 
                 newState.temperature = values[6].toLong()
                 newState.humidity = values[7].toLong()
-                newState.humiditySoil1 = (100.0 * (1.0 - (values[8].toDouble() / 1024.0))).toLong()
-                newState.humiditySoil2 = (100.0 * (1.0 - (values[9].toDouble() / 1024.0))).toLong()
+                newState.humiditySoil1 = (100.0 * (1.0 - (values[8].toLong().toDouble() / 1024.0))).toLong()
+                newState.humiditySoil2 = (100.0 * (1.0 - (values[9].toLong().toDouble() / 1024.0))).toLong()
                 newState.waterLevel = values[10].toLong()
 
                 //println("Parsed $newState")
                 callback(newState)
             }
         } catch (ex: Exception) {
-            //ex.printStackTrace()
+            log.error(ex)
         }
     }
 
