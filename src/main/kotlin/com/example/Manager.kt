@@ -49,13 +49,13 @@ class Manager(private val state: State) {
             }
         }
 
-        timer.scheduleAtFixedRate(1000, 10 * 60_000) {
+        timer.scheduleAtFixedRate(1000, 30 * 60 * 1_000) {
             captureImage()
         }
 
-        timer.scheduleAtFixedRate(60_000, 24 * 60 * 60_000) {
+        /*timer.scheduleAtFixedRate(60_000, 24 * 60 * 60_000) {
             createTimelapse()
-        }
+        }*/
 
         timer.scheduleAtFixedRate(1000, 60_000) {
             db.insertNewState(state)
