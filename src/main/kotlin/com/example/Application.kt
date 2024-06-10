@@ -4,8 +4,18 @@ import io.ktor.server.application.*
 import io.ktor.server.thymeleaf.*
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver
 import org.thymeleaf.templateresolver.FileTemplateResolver
+import java.io.File
 
-fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
+
+fun main(args: Array<String>) {
+    val logConfigFile = File("logback.xml")
+    if (logConfigFile.exists()) {
+        System.setProperty("logback.configurationFile", logConfigFile.absolutePath);
+        println("set config file to ${logConfigFile.absolutePath}")
+    }
+    io.ktor.server.netty.EngineMain.main(args)
+}
+
 
 fun Application.module() {
     configureRouting()
