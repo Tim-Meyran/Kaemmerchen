@@ -44,7 +44,7 @@ fun Application.configureRouting() {
             val logFile = File("kaemmerchen.log")
             var logText = listOf<String>()
             if (logFile.exists()) {
-                logText = logFile.readLines()
+                logText = logFile.readLines().reversed()
             }
             call.respond(ThymeleafContent("logging", mapOf("lines" to logText)))
 
