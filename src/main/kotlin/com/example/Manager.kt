@@ -105,12 +105,14 @@ class Manager(private val state: State) {
         if (state.automaticMode == 0L) return
 
         if (state.humiditySoil2 <= 68) {
-            state.pump2 = 1
-            log.info("Start Pump - State <{}>", state)
+            Thread {
+                state.pump2 = 1
+                log.info("Start Pump - State <{}>", state)
 
-            Thread.sleep(5000)
-            log.info("Stop Pump - State <{}>", state)
-            state.pump2 = 0
+                Thread.sleep(10_000)
+                log.info("Stop Pump - State <{}>", state)
+                state.pump2 = 0
+            }.start()
         }
     }
 
