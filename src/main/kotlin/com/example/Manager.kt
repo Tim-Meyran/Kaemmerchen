@@ -104,7 +104,7 @@ class Manager(private val state: State) {
     private fun updatePumps() {
         if (state.automaticMode == 0L) return
 
-        if (state.humiditySoil2 < 65) {
+        if (state.humiditySoil2 <= 68) {
             state.pump2 = 1
             log.info("Start Pump - State <{}>", state)
 

@@ -40,7 +40,6 @@ fun Application.configureRouting() {
         }
 
         get("/logging") {
-
             val logFile = File("kaemmerchen.log")
             var logText = listOf<String>()
             if (logFile.exists()) {
