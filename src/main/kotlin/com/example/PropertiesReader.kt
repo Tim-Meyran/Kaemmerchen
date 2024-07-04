@@ -7,11 +7,10 @@ private const val CONFIG = "config.properties"
 
 object PropertiesReader {
     private val properties = Properties()
+    private val file = File(CONFIG)
 
-    init {
-        val file = File(CONFIG)
+    fun getProperty(key: String): String? {
         properties.load(file.inputStream())
+        return properties.getProperty(key)
     }
-
-    fun getProperty(key: String): String? = properties.getProperty(key)
 }

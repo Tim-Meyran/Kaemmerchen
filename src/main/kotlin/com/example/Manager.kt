@@ -7,7 +7,6 @@ import java.time.LocalDateTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.scheduleAtFixedRate
-import kotlin.io.path.getLastModifiedTime
 
 class Manager(private val state: State) {
 
@@ -67,28 +66,6 @@ class Manager(private val state: State) {
         }
     }
 
-    private fun createTimelapse() {
-        val directory = File("timelapse")
-        directory.mkdir()
-
-        val imageFileList = File("timelapse/image-list.txt")
-        if (!imageFileList.exists()) imageFileList.createNewFile()
-
-        imageFileList.writeText("")
-
-        val files = directory.listFiles()?.filter { it.isFile }
-        files?.filter { it.isFile && it.name.endsWith(".png") }?.sortedBy { it.toPath().getLastModifiedTime() }
-            ?.forEach { file ->
-                imageFileList.appendText("file '${file.name}'\n")
-            } ?: println("No files found or directory does not exist.")
-
-
-        val timelapseCmd: String? = PropertiesReader.getProperty("TIMELAPSE_CMD")
-        timelapseCmd?.let {
-            val p: Process = Runtime.getRuntime().exec(it)
-            p.waitFor(240, TimeUnit.SECONDS)
-        }
-    }
 
     private fun updateAutomatic() {
         log.debug("updateAutomatic State <{}>", state)
@@ -104,13 +81,32 @@ class Manager(private val state: State) {
     private fun updatePumps() {
         if (state.automaticMode == 0L) return
 
-        if (state.humiditySoil2 <= 68) {
+        val minHumidity: Int = PropertiesReader.getProperty("minHumidity")?.let {
+            try {
+                it.toInt()
+            } catch (ex: NumberFormatException) {
+                null
+            }
+        } ?: 75
+
+        if (state.humiditySoil1 <= minHumidity) {
             Thread {
-                state.pump2 = 1
-                log.info("Start Pump - State <{}>", state)
+                state.pump1 = 1
+                log.info("Start Pump1 - State <{}>", state)
 
                 Thread.sleep(10_000)
-                log.info("Stop Pump - State <{}>", state)
+                log.info("Stop Pump1 - State <{}>", state)
+                state.pump1 = 0
+            }.start()
+        }
+
+        if (state.humiditySoil2 <= minHumidity) {
+            Thread {
+                state.pump2 = 1
+                log.info("Start Pump2 - State <{}>", state)
+
+                Thread.sleep(10_000)
+                log.info("Stop Pump2 - State <{}>", state)
                 state.pump2 = 0
             }.start()
         }
