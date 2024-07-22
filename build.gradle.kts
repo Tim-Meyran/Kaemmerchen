@@ -33,17 +33,10 @@ dependencies {
     implementation("io.ktor:ktor-server-html-builder")
     implementation("io.ktor:ktor-server-thymeleaf")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
-
     //implementation("com.github.sarxos:webcam-capture:0.3.12")
-
     implementation("com.fazecast:jSerialComm:[2.0.0,3.0.0)")
-
     implementation("app.cash.sqldelight:sqlite-driver:2.0.2")
-
-
-
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

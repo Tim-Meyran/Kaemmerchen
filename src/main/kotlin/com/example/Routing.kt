@@ -12,6 +12,7 @@ import kotlinx.serialization.json.Json
 import org.slf4j.LoggerFactory
 import java.io.File
 import kotlin.math.max
+import kotlin.math.min
 
 
 fun Application.configureRouting() {
@@ -78,6 +79,8 @@ fun Application.configureRouting() {
                     "automaticMode" -> state.automaticMode = newStateEntry.value
                     "targetHumiditySoil1" -> state.targetHumiditySoil1 = newStateEntry.value
                     "targetHumiditySoil2" -> state.targetHumiditySoil2 = newStateEntry.value
+                    "lightOnTime" -> state.lightOnTime = min(newStateEntry.value, state.lightOffTime)
+                    "lightOffTime" -> state.lightOffTime = max(newStateEntry.value, state.lightOnTime)
                 }
                 state.changed = true
             }

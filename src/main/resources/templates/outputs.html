@@ -65,11 +65,48 @@
         <article>
             <label>
                 Target Humidity Soil 1
-                <input name="targetHumiditySoil1" type="range" hx-post="/set_output" hx-include="[name='targetHumiditySoil1_hidden']"
-                       th:value="${data.targetHumiditySoil1}" oninput="this.nextElementSibling.value = this.value"/>
-                <output>{data.targetHumiditySoil1}</output>
-                <input name="automaticMode_hidden" type="hidden"/>
+                <input name="targetHumiditySoil1" type="range" hx-post="/set_output" th:value="${data.targetHumiditySoil1}" oninput="this.nextElementSibling.value = this.value"/>
+                <output th:text="${data.targetHumiditySoil1}%"></output>
+            </label>
+        </article>
 
+        <article>
+            <label>
+                Target Humidity Soil 2
+                <input name="targetHumiditySoil2" type="range" hx-post="/set_output" th:value="${data.targetHumiditySoil2}" oninput="this.nextElementSibling.value = this.value"/>
+                <output th:text="${data.targetHumiditySoil2}%"></output>
+            </label>
+        </article>
+
+        <article>
+            <label>
+                Pump 1 duration
+                <input name="pump1OnDuration" type="range" hx-post="/set_output" th:value="${data.pump1OnDuration}" oninput="this.nextElementSibling.value = this.value"/>
+                <output th:text="${data.pump1OnDuration}%"></output>
+            </label>
+        </article>
+
+        <article>
+            <label>
+                Pump 2 duration
+                <input name="pump2OnDuration" type="range" hx-post="/set_output" th:value="${data.pump2OnDuration}" oninput="this.nextElementSibling.value = this.value"/>
+                <output th:text="${data.pump2OnDuration}%"></output>
+            </label>
+        </article>
+
+        <article>
+            <label>
+                lightOnTime
+                <input name="lightOnTime" type="range" hx-post="/set_output" th:value="${data.lightOnTime}" oninput="this.nextElementSibling.value = this.value"/>
+                <output th:text="${data.lightOnTime}%"></output>
+            </label>
+        </article>
+
+        <article>
+            <label>
+                lightOffTime
+                <input name="lightOffTime" type="range" hx-post="/set_output" th:value="${data.lightOffTime}" oninput="this.nextElementSibling.value = this.value"/>
+                <output th:text="${data.lightOffTime}%"></output>
             </label>
         </article>
     </div>
