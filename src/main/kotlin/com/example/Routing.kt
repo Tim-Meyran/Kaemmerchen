@@ -76,6 +76,8 @@ fun Application.configureRouting() {
                     "pump1" -> state.pump1 = newStateEntry.value
                     "pump2" -> state.pump2 = newStateEntry.value
                     "automaticMode" -> state.automaticMode = newStateEntry.value
+                    "targetHumiditySoil1" -> state.targetHumiditySoil1 = newStateEntry.value
+                    "targetHumiditySoil2" -> state.targetHumiditySoil2 = newStateEntry.value
                 }
                 state.changed = true
             }

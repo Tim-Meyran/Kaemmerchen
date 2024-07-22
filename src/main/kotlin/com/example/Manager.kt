@@ -73,7 +73,8 @@ class Manager(private val state: State) {
 
         val currentDateTime = LocalDateTime.now()
         val oldLight = state.light
-        state.light = if (currentDateTime.hour >= 6) 1L else 0L
+        state.light =
+            if (currentDateTime.hour >= state.lightOnTime && currentDateTime.hour < state.lightOffTime) 1L else 0L
         if (oldLight != state.light)
             log.info("update light - State <{}>", state)
     }
@@ -89,23 +90,23 @@ class Manager(private val state: State) {
             }
         } ?: 75
 
-        if (state.humiditySoil1 <= minHumidity) {
+        if (state.humiditySoil1 <= state.targetHumiditySoil1) {
             Thread {
                 state.pump1 = 1
                 log.info("Start Pump1 - State <{}>", state)
 
-                Thread.sleep(10_000)
+                Thread.sleep(state.pump1OnDuration)
                 log.info("Stop Pump1 - State <{}>", state)
                 state.pump1 = 0
             }.start()
         }
 
-        if (state.humiditySoil2 <= minHumidity) {
+        if (state.humiditySoil2 <= state.targetHumiditySoil2) {
             Thread {
                 state.pump2 = 1
                 log.info("Start Pump2 - State <{}>", state)
 
-                Thread.sleep(10_000)
+                Thread.sleep(state.pump2OnDuration)
                 log.info("Stop Pump2 - State <{}>", state)
                 state.pump2 = 0
             }.start()
@@ -135,14 +136,18 @@ class Manager(private val state: State) {
 
         captureCmd?.let {
             log.debug("Executing $it")
-            val p: Process = Runtime.getRuntime().exec(it)
-            p.waitFor(15, TimeUnit.SECONDS)
-                .let { successful -> log.info("Capture {}", if (successful) "successful" else " not successful") }
+            try {
+                val p: Process = Runtime.getRuntime().exec(it)
+                p.waitFor(15, TimeUnit.SECONDS)
+                    .let { successful -> log.info("Capture {}", if (successful) "successful" else " not successful") }
 
-            val imageFile = File("webcam.png")
-            if (imageFile.exists()) {
-                File("timelapse").mkdirs()
-                imageFile.copyTo(File("timelapse/image_${System.currentTimeMillis()}.png"))
+                val imageFile = File("webcam.png")
+                if (imageFile.exists()) {
+                    File("timelapse").mkdirs()
+                    imageFile.copyTo(File("timelapse/image_${System.currentTimeMillis()}.png"))
+                }
+            } catch (ex: Exception) {
+                log.error("Cannot take picture", ex)
             }
         }
     }

@@ -11,7 +11,6 @@
         </article>
         <article>
             <label>
-
                 <input name="light" type="checkbox" role="switch" hx-post="/set_output" value="1"
                        hx-include="[name='light_hidden']" th:checked="${data.light > 0}"/>
                 <input name="light_hidden" type="hidden" value="0"/>
@@ -37,26 +36,40 @@
         </article>
 
         <article>
-            <input name="fan1" type="checkbox" role="switch" hx-post="/set_output" value="1"
-                   hx-include="[name='fan1_hidden']" th:checked="${data.fan1 > 0}"/>
-            <input name="fan1_hidden" type="hidden" value="0"/>
-            Fan 1
+            <label>
+                <input name="fan1" type="checkbox" role="switch" hx-post="/set_output" value="1"
+                       hx-include="[name='fan1_hidden']" th:checked="${data.fan1 > 0}"/>
+                <input name="fan1_hidden" type="hidden" value="0"/>
+                Fan 1
             </label>
         </article>
 
         <article>
-            <input name="fan2" type="checkbox" role="switch" hx-post="/set_output" value="1"
-                   hx-include="[name='fan2_hidden']" th:checked="${data.fan2 > 0}"/>
-            <input name="fan2_hidden" type="hidden" value="0"/>
-            Fan 2
+            <label>
+                <input name="fan2" type="checkbox" role="switch" hx-post="/set_output" value="1"
+                       hx-include="[name='fan2_hidden']" th:checked="${data.fan2 > 0}"/>
+                <input name="fan2_hidden" type="hidden" value="0"/>
+                Fan 2
             </label>
         </article>
 
         <article>
-            <input name="automaticMode" type="checkbox" role="switch" hx-post="/set_output" value="1"
-                   hx-include="[name='automaticMode_hidden']" th:checked="${data.automaticMode > 0}"/>
-            <input name="automaticMode_hidden" type="hidden" value="0"/>
-            Automatic
+            <label>
+                <input name="automaticMode" type="checkbox" role="switch" hx-post="/set_output" value="1"
+                       hx-include="[name='automaticMode_hidden']" th:checked="${data.automaticMode > 0}"/>
+                <input name="automaticMode_hidden" type="hidden" value="0"/>
+                Automatic
+            </label>
+        </article>
+
+        <article>
+            <label>
+                Target Humidity Soil 1
+                <input name="targetHumiditySoil1" type="range" hx-post="/set_output" hx-include="[name='targetHumiditySoil1_hidden']"
+                       th:value="${data.targetHumiditySoil1}" oninput="this.nextElementSibling.value = this.value"/>
+                <output>{data.targetHumiditySoil1}</output>
+                <input name="automaticMode_hidden" type="hidden"/>
+
             </label>
         </article>
     </div>

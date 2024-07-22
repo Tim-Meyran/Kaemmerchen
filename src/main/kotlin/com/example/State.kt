@@ -16,8 +16,14 @@ data class State(
     @Required var humidity: Long = 0,
     @Required var humiditySoil1: Long = 0,
     @Required var humiditySoil2: Long = 0,
+    @Required var targetHumiditySoil1: Long = 80,
+    @Required var targetHumiditySoil2: Long = 80,
+    @Required var pump1OnDuration: Long = 20,
+    @Required var pump2OnDuration: Long = 20,
     @Required var waterLevel: Long = 0,
-    @Required var automaticMode: Long = 0,
+    @Required var automaticMode: Long = 1,
+    @Required var lightOnTime: Long = 6,
+    @Required var lightOffTime: Long = 24,
 
     var changed: Boolean = false,
     var takeImageNow: Boolean = false
@@ -52,7 +58,12 @@ data class State(
             "WaterLevel" to "$waterLevel",
             "Soil Humidity 1" to "$humiditySoil1",
             "Soil Humidity 2" to "$humiditySoil2",
+            "Target Soil Humidity 1" to "$targetHumiditySoil1",
+            "Target Soil Humidity 2" to "$targetHumiditySoil2",
+            "Pump1 duration" to "$pump1OnDuration",
+            "Pump2 duration" to "$pump2OnDuration",
             "Automatic Mode" to "$automaticMode",
+            "Light On Time" to "$lightOnTime"
         )
     }
 }
