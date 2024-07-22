@@ -14,6 +14,8 @@ class Manager(private val state: State) {
     private val db = DiskDatabase()
     private val serialManager = SerialManager(this::handleNewSerialState)
 
+    private var lastPumpTimestamp = System.currentTimeMillis()
+
     val log = LoggerFactory.getLogger("Manager");
 
     init {
@@ -34,19 +36,18 @@ class Manager(private val state: State) {
             }
         }
 
-        timer.scheduleAtFixedRate(1000, 5_000) {
+        timer.scheduleAtFixedRate(1000, 500) {
             updateAutomatic()
-
-            //serialManager.receiveLine("0;0;0;0;0;0;27;75;145;341;1\r\n")
-        }
-
-        timer.scheduleAtFixedRate(1000, 60 * 60 * 1_000) {
-            updatePumps()
         }
 
         timer.scheduleAtFixedRate(1000, 500) {
             updateOutputs()
+        }
+        timer.scheduleAtFixedRate(1000, 500) {
+            updatePumps()
+        }
 
+        timer.scheduleAtFixedRate(1000, 500) {
             if (state.takeImageNow) {
                 state.takeImageNow = false
                 captureImage()
@@ -55,14 +56,6 @@ class Manager(private val state: State) {
 
         timer.scheduleAtFixedRate(1000, 30 * 60 * 1_000) {
             captureImage()
-        }
-
-        /*timer.scheduleAtFixedRate(60_000, 24 * 60 * 60_000) {
-            createTimelapse()
-        }*/
-
-        timer.scheduleAtFixedRate(1000, 60_000) {
-            db.insertNewState(state)
         }
     }
 
@@ -82,20 +75,17 @@ class Manager(private val state: State) {
     private fun updatePumps() {
         if (state.automaticMode == 0L) return
 
-        val minHumidity: Int = PropertiesReader.getProperty("minHumidity")?.let {
-            try {
-                it.toInt()
-            } catch (ex: NumberFormatException) {
-                null
-            }
-        } ?: 75
+        val now = System.currentTimeMillis()
+        if (now < lastPumpTimestamp + (state.pumpInterval * 1000 * 60)) return
+
+        lastPumpTimestamp = now
 
         if (state.humiditySoil1 <= state.targetHumiditySoil1) {
             Thread {
                 state.pump1 = 1
                 log.info("Start Pump1 - State <{}>", state)
 
-                Thread.sleep(state.pump1OnDuration)
+                Thread.sleep(state.pump1OnDuration * 1000)
                 log.info("Stop Pump1 - State <{}>", state)
                 state.pump1 = 0
             }.start()
@@ -106,7 +96,7 @@ class Manager(private val state: State) {
                 state.pump2 = 1
                 log.info("Start Pump2 - State <{}>", state)
 
-                Thread.sleep(state.pump2OnDuration)
+                Thread.sleep(state.pump2OnDuration * 1000)
                 log.info("Stop Pump2 - State <{}>", state)
                 state.pump2 = 0
             }.start()

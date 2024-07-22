@@ -24,6 +24,7 @@ data class State(
     @Required var automaticMode: Long = 1,
     @Required var lightOnTime: Long = 6,
     @Required var lightOffTime: Long = 24,
+    @Required var pumpInterval: Long = 1,
 
     var changed: Boolean = false,
     var takeImageNow: Boolean = false
@@ -63,7 +64,8 @@ data class State(
             "Pump1 duration" to "$pump1OnDuration",
             "Pump2 duration" to "$pump2OnDuration",
             "Automatic Mode" to "$automaticMode",
-            "Light On Time" to "$lightOnTime"
+            "Light On Time" to "$lightOnTime",
+            "Pump Interval" to "$pumpInterval"
         )
     }
 }

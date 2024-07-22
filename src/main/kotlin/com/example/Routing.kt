@@ -79,8 +79,11 @@ fun Application.configureRouting() {
                     "automaticMode" -> state.automaticMode = newStateEntry.value
                     "targetHumiditySoil1" -> state.targetHumiditySoil1 = newStateEntry.value
                     "targetHumiditySoil2" -> state.targetHumiditySoil2 = newStateEntry.value
+                    "pump1OnDuration" -> state.pump1OnDuration = newStateEntry.value
+                    "pump2OnDuration" -> state.pump2OnDuration = newStateEntry.value
                     "lightOnTime" -> state.lightOnTime = min(newStateEntry.value, state.lightOffTime)
                     "lightOffTime" -> state.lightOffTime = max(newStateEntry.value, state.lightOnTime)
+                    "pumpInterval" -> state.pumpInterval = newStateEntry.value
                 }
                 state.changed = true
             }

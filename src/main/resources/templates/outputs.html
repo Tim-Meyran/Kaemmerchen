@@ -65,48 +65,56 @@
         <article>
             <label>
                 Target Humidity Soil 1
-                <input name="targetHumiditySoil1" type="range" hx-post="/set_output" th:value="${data.targetHumiditySoil1}" oninput="this.nextElementSibling.value = this.value"/>
-                <output th:text="${data.targetHumiditySoil1}%"></output>
+                <input name="targetHumiditySoil1" type="range" hx-post="/set_output" th:value="${data.targetHumiditySoil1}" oninput="this.nextElementSibling.value = this.value + '%'"/>
+                <output th:text="${data.targetHumiditySoil1 + '%'}"></output>
             </label>
         </article>
 
         <article>
             <label>
                 Target Humidity Soil 2
-                <input name="targetHumiditySoil2" type="range" hx-post="/set_output" th:value="${data.targetHumiditySoil2}" oninput="this.nextElementSibling.value = this.value"/>
-                <output th:text="${data.targetHumiditySoil2}%"></output>
+                <input name="targetHumiditySoil2" type="range" hx-post="/set_output" th:value="${data.targetHumiditySoil2}" oninput="this.nextElementSibling.value = this.value+ '%'"/>
+                <output th:text="${data.targetHumiditySoil2+ '%'}"></output>
             </label>
         </article>
 
         <article>
             <label>
                 Pump 1 duration
-                <input name="pump1OnDuration" type="range" hx-post="/set_output" th:value="${data.pump1OnDuration}" oninput="this.nextElementSibling.value = this.value"/>
-                <output th:text="${data.pump1OnDuration}%"></output>
+                <input name="pump1OnDuration" type="range" hx-post="/set_output" th:value="${data.pump1OnDuration}" oninput="this.nextElementSibling.value = this.value+ 's'"/>
+                <output th:text="${data.pump1OnDuration + 's'}"></output>
             </label>
         </article>
 
         <article>
             <label>
                 Pump 2 duration
-                <input name="pump2OnDuration" type="range" hx-post="/set_output" th:value="${data.pump2OnDuration}" oninput="this.nextElementSibling.value = this.value"/>
-                <output th:text="${data.pump2OnDuration}%"></output>
+                <input name="pump2OnDuration" type="range" hx-post="/set_output" th:value="${data.pump2OnDuration}" oninput="this.nextElementSibling.value = this.value+ 's'"/>
+                <output th:text="${data.pump2OnDuration + 's'}"></output>
             </label>
         </article>
 
         <article>
             <label>
                 lightOnTime
-                <input name="lightOnTime" type="range" hx-post="/set_output" th:value="${data.lightOnTime}" oninput="this.nextElementSibling.value = this.value"/>
-                <output th:text="${data.lightOnTime}%"></output>
+                <input name="lightOnTime" type="range" hx-post="/set_output" min="0" max="24" th:value="${data.lightOnTime}" oninput="this.nextElementSibling.value = this.value+ 'h'"/>
+                <output th:text="${data.lightOnTime + 'h'}"></output>
             </label>
         </article>
 
         <article>
             <label>
                 lightOffTime
-                <input name="lightOffTime" type="range" hx-post="/set_output" th:value="${data.lightOffTime}" oninput="this.nextElementSibling.value = this.value"/>
-                <output th:text="${data.lightOffTime}%"></output>
+                <input name="lightOffTime" type="range" hx-post="/set_output" min="0" max="24" th:value="${data.lightOffTime}" oninput="this.nextElementSibling.value = this.value+ 'h'"/>
+                <output th:text="${data.lightOffTime + 'h'}"></output>
+            </label>
+        </article>
+
+        <article>
+            <label>
+                Pump Interval
+                <input name="pumpInterval" type="range" hx-post="/set_output" th:value="${data.pumpInterval}" max="120" step="10"  oninput="this.nextElementSibling.value = this.value+ 'min'"/>
+                <output th:text="${data.pumpInterval + 'min'}"></output>
             </label>
         </article>
     </div>
