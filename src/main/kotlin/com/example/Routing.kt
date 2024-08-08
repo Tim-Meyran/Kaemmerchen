@@ -21,7 +21,9 @@ fun Application.configureRouting() {
 
     val manager = Manager(state)
 
-    val versionString = this::class.java.classLoader.getResource("VERSION")?.readText() ?: "NO_VERSION_FILE"
+    val versionString =
+        this::class.java.classLoader.getResource("VERSION")?.readText()?.replace("\${VERSION}", "DEV_MODE")
+            ?: "NO_VERSION_FILE"
 
     println("Version string: $versionString")
 
