@@ -119,26 +119,33 @@ class Manager(private val state: State) {
     }
 
     private fun captureImage() {
-        if (state.light == 0L) return
+        if (state.light != null && state.light!! < 1L) return
 
-        log.info("Capture Image")
-        val captureCmd: String? = PropertiesReader.getProperty("CAPTURE_CMD")
+        Thread {
+            log.info("Capture Image $state")
+            val captureCmd: String? = PropertiesReader.getProperty("CAPTURE_CMD")
 
-        captureCmd?.let {
-            log.debug("Executing $it")
-            try {
-                val p: Process = Runtime.getRuntime().exec(it)
-                p.waitFor(15, TimeUnit.SECONDS)
-                    .let { successful -> log.info("Capture {}", if (successful) "successful" else " not successful") }
+            captureCmd?.let {
+                log.debug("Executing $it")
+                try {
+                    val p: Process = Runtime.getRuntime().exec(it)
+                    p.waitFor(15, TimeUnit.SECONDS)
+                        .let { successful ->
+                            log.info(
+                                "Capture {}",
+                                if (successful) "successful" else " not successful"
+                            )
+                        }
 
-                val imageFile = File("webcam.png")
-                if (imageFile.exists()) {
-                    File("timelapse").mkdirs()
-                    imageFile.copyTo(File("timelapse/image_${System.currentTimeMillis()}.png"))
+                    val imageFile = File("webcam.png")
+                    if (imageFile.exists()) {
+                        File("timelapse").mkdirs()
+                        imageFile.copyTo(File("timelapse/image_${System.currentTimeMillis()}.png"))
+                    }
+                } catch (ex: Exception) {
+                    log.error("Cannot take picture", ex)
                 }
-            } catch (ex: Exception) {
-                log.error("Cannot take picture", ex)
             }
-        }
+        }.start()
     }
 }
