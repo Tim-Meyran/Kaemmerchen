@@ -21,11 +21,14 @@ fun Application.configureRouting() {
 
     val manager = Manager(state)
 
+    val versionString = File("VERSION").readText()
+    println("Version string: $versionString")
+
     val log = LoggerFactory.getLogger("Router");
 
     routing {
         get("/") {
-            call.respond(ThymeleafContent("index", mapOf()))
+            call.respond(ThymeleafContent("index", mapOf("git_version" to versionString)))
         }
 
         get("/webcam") {
