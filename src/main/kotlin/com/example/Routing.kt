@@ -21,10 +21,11 @@ fun Application.configureRouting() {
 
     val manager = Manager(state)
 
-    val versionString = File("VERSION").readText()
+    val versionString = this::class.java.classLoader.getResource("VERSION")?.readText() ?: "NO_VERSION_FILE"
+
     println("Version string: $versionString")
 
-    val log = LoggerFactory.getLogger("Router");
+    val log = LoggerFactory.getLogger("Router")
 
     routing {
         get("/") {
