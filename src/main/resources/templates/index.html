@@ -1,42 +1,263 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Index</title>
-    <script src="static/htmx.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
     <link rel="stylesheet" href="static/css/pico.min.css"/>
     <link rel="stylesheet" href="static/css/pico.colors.min.css"/>
+    <title>Hello world!</title>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
 </head>
+
 <body>
+<!-- Header -->
+<header class="container">
+    <nav>
+        <ul>
+            <li><h1><strong>Kaemmerchen</strong></h1></li>
+        </ul>
+        <ul>
+            <li><a href="/plant1">Plant 1</a></li>
+            <li><a href="/plant2">Plant 2</a></li>
+        </ul>
+    </nav>
+</header>
+<!-- ./ Header -->
 
+<!-- Main -->
 <main class="container">
-    <h1>Kaemmerchen</h1>
+    <section>
+        <article>
+            <canvas id="myChart" style="width:100%"></canvas>
+        </article>
+    </section>
 
-    <div hx-get="/outputs"
-         hx-trigger="load"
-         hx-swap="outerHTML">
-    </div>
+    <!-- Form elements-->
+    <section id="form">
+        <form>
+            <h2>Form elements</h2>
+            <!-- Range slider control -->
+            <label for="range">Range slider
+                <input type="range" min="0" max="100" value="50" id="range" name="range"/>
+            </label>
 
-    <div hx-get="/inputs"
-         hx-trigger="load"
-         hx-swap="outerHTML">
-    </div>
+            <!-- States -->
+            <div class="grid">
+                <label for="valid">
+                    Valid
+                    <input type="text" id="valid" name="valid" placeholder="Valid" aria-invalid="false"/>
+                </label>
+                <label for="invalid">
+                    Invalid
+                    <input
+                            type="text"
+                            id="invalid"
+                            name="invalid"
+                            placeholder="Invalid"
+                            aria-invalid="true"
+                    />
+                </label>
+                <label for="disabled">
+                    Disabled
+                    <input type="text" id="disabled" name="disabled" placeholder="Disabled" disabled/>
+                </label>
+            </div>
 
-    <div hx-get="/webcam"
-         hx-trigger="load"
-         hx-swap="outerHTML">
-    </div>
+            <div class="grid">
+                <!-- Date-->
+                <label for="date"
+                >Date
+                    <input type="date" id="date" name="date"/>
+                </label>
+
+                <!-- Time-->
+                <label for="time"
+                >Time
+                    <input type="time" id="time" name="time"/>
+                </label>
+
+                <!-- Color-->
+                <label for="color"
+                >Color
+                    <input type="color" id="color" name="color" value="#0eaaaa"/>
+                </label>
+            </div>
+
+            <div class="grid">
+                <!-- Checkboxes -->
+                <fieldset>
+                    <legend><strong>Checkboxes</strong></legend>
+                    <label for="checkbox-1">
+                        <input type="checkbox" id="checkbox-1" name="checkbox-1" checked/>
+                        Checkbox
+                    </label>
+                    <label for="checkbox-2">
+                        <input type="checkbox" id="checkbox-2" name="checkbox-2"/>
+                        Checkbox
+                    </label>
+                </fieldset>
+
+                <!-- Radio buttons -->
+                <fieldset>
+                    <legend><strong>Radio buttons</strong></legend>
+                    <label for="radio-1">
+                        <input type="radio" id="radio-1" name="radio" value="radio-1" checked/>
+                        Radio button
+                    </label>
+                    <label for="radio-2">
+                        <input type="radio" id="radio-2" name="radio" value="radio-2"/>
+                        Radio button
+                    </label>
+                </fieldset>
+
+                <!-- Switch -->
+                <fieldset>
+                    <legend><strong>Switches</strong></legend>
+                    <label for="switch-1">
+                        <input type="checkbox" id="switch-1" name="switch-1" role="switch" checked/>
+                        Switch
+                    </label>
+                    <label for="switch-2">
+                        <input type="checkbox" id="switch-2" name="switch-2" role="switch"/>
+                        Switch
+                    </label>
+                </fieldset>
+            </div>
+
+            <!-- Buttons -->
+            <input type="reset" value="Reset" onclick="event.preventDefault()"/>
+            <input type="submit" value="Submit" onclick="event.preventDefault()"/>
+        </form>
+    </section>
+
+
+    <!-- Form elements-->
+    <section id="form">
+        <form>
+            <h2>Form elements</h2>
+
+            <!-- Range slider control -->
+            <label for="range">Range slider
+                <input type="range" min="0" max="100" value="50" id="range" name="range"/>
+            </label>
+
+
+            <div class="grid">
+                <!-- Date-->
+                <label for="date"
+                >Date
+                    <input type="date" id="date" name="date"/>
+                </label>
+
+                <!-- Time-->
+                <label for="time"
+                >Time
+                    <input type="time" id="time" name="time"/>
+                </label>
+
+            </div>
+
+            <div class="grid">
+                <!-- Switch -->
+                <fieldset>
+                    <legend><strong>Switches</strong></legend>
+                    <label for="switch-1">
+                        <input type="checkbox" id="switch-1" name="switch-1" role="switch" checked/>
+                        Switch
+                    </label>
+                    <label for="switch-2">
+                        <input type="checkbox" id="switch-2" name="switch-2" role="switch"/>
+                        Switch
+                    </label>
+                </fieldset>
+            </div>
+
+            <!-- Buttons -->
+            <input type="reset" value="Reset" onclick="event.preventDefault()"/>
+            <input type="submit" value="Submit" onclick="event.preventDefault()"/>
+        </form>
+    </section>
+    <!-- ./ Form elements-->
 
 
 </main>
+<!-- ./ Main -->
 
+<!-- Footer -->
 <footer class="container">
-    <form action="/logging">
-        <input type="submit" value="Logs"/>
-    </form>
-    <p th:text="${git_version}">Version</p>
+    <small
+    >Built with <a href="https://picocss.com">Pico</a> •
+        <a href="https://github.com/picocss/examples/blob/master/v2-html/index.html"
+        >Source code</a
+        ></small
+    >
 </footer>
+<!-- ./ Footer -->
 
+<!-- Modal example -->
+<dialog id="modal-example">
+    <article>
+        <header>
+            <button
+                    aria-label="Close"
+                    rel="prev"
+                    data-target="modal-example"
+                    onclick="toggleModal(event)"
+            ></button>
+            <h3>Confirm your action!</h3>
+        </header>
+        <p>
+            Cras sit amet maximus risus. Pellentesque sodales odio sit amet augue finibus
+            pellentesque. Nullam finibus risus non semper euismod.
+        </p>
+        <footer>
+            <button
+                    role="button"
+                    class="secondary"
+                    data-target="modal-example"
+                    onclick="toggleModal(event)"
+            >
+                Cancel
+            </button
+            >
+            <button autofocus data-target="modal-example" onclick="toggleModal(event)">
+                Confirm
+            </button>
+        </footer>
+    </article>
+</dialog>
+<!-- ./ Modal example -->
+
+<script>
+    const xValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
+    const yValues = [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
+
+    new Chart("myChart", {
+        type: "line",
+        data: {
+            labels: xValues,
+            datasets: [{
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "rgb(0,113,172)",
+                borderColor: "rgb(255,255,255)",
+                data: yValues
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+                yAxes: [{ticks: {min: 6, max: 16}}],
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
 
 </body>
 </html>

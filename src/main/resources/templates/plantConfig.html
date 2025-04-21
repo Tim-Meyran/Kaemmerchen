@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <link rel="stylesheet" href="static/css/pico.min.css"/>
+    <link rel="stylesheet" href="static/css/pico.colors.min.css"/>
+    <title>Hello world!</title>
+</head>
+
+<body>
+<main class="container">
+
+    <!-- Form elements-->
+    <section id="form">
+        <form action="/plantConfig" method="post">
+            <h2>Plant Configuration</h2>
+            <input type="hidden" id="plantId" name="plantId" th:value="${plantId}">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Plant Name" th:value="${name}"/>
+
+            <textarea name="desc"
+                      placeholder="Plant description..."
+                      aria-label="Professional short bio"
+                      th:text="${desc}">
+            </textarea>
+
+            <div class="grid">
+                <label for="date">Plant Date
+                    <input type="date" id="date" name="date" th:value="${date}"/>
+                </label>
+            </div>
+            <a type="button" href="/" class="secondary" style="width:100%">Cancel</a>
+            <input type="submit" value="Save"/>
+        </form>
+    </section>
+
+</main>
+</body>
+</html>
+
+</body>
+</html>

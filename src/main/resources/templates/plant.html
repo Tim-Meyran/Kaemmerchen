@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <link rel="stylesheet" href="static/css/pico.min.css"/>
+    <link rel="stylesheet" href="static/css/pico.colors.min.css"/>
+    <title>Hello world!</title>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
+</head>
+
+<body>
+<!-- Header -->
+<header class="container">
+    <h1>Kaemmerchen</h1>
+    <nav>
+
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/plant1">Plant1</a></li>
+            <li><a href="/plant2">Plant2</a></li>
+        </ul>
+    </nav>
+</header>
+<!-- ./ Header -->
+
+<!-- Main -->
+<main class="container">
+    <section>
+        <article>
+            <canvas id="myChart" style="width:100%"></canvas>
+        </article>
+    </section>
+
+    <section id="typography">
+        <!-- Blockquote-->
+        <h2 th:text="${name}"></h2>
+        <a th:href="${'/plantConfig?plant='+plantId}" style="float: right;">Edit</a>
+        <blockquote>
+            <p th:text="${desc}"></p>
+            <footer>
+                <cite th:text="${dateString}">planted on 01.09.2024 - 19 days old</cite>
+            </footer>
+        </blockquote>
+    </section>
+
+
+    <!-- Form elements-->
+    <section id="form">
+        <form>
+            <h2>Settings</h2>
+
+            <label>
+                Target Humidity Soil
+                <output th:text="${targetHumiditySoil + '%'}" style="float: right;"></output>
+                <input name="targetHumiditySoil" type="range" hx-post="/set_output" th:value="${targetHumiditySoil}"
+                       oninput="this.previousElementSibling.value = this.value + '%'"/>
+            </label>
+        </form>
+
+    </section>
+
+
+</main>
+<!-- ./ Main -->
+
+<script>
+    const xValues = [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150];
+    const yValues = [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15];
+
+    new Chart("myChart", {
+        type: "line",
+        data: {
+            labels: xValues,
+            datasets: [{
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "rgb(0,113,172)",
+                borderColor: "rgb(255,255,255)",
+                data: yValues
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+                yAxes: [{ticks: {min: 6, max: 16}}],
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
+
+</body>
+</html>

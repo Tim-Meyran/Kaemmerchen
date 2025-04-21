@@ -36,18 +36,19 @@ class Manager(private val state: State) {
             }
         }
 
-        timer.scheduleAtFixedRate(1000, 500) {
+        timer.scheduleAtFixedRate(1000, 10_000) {
             updateAutomatic()
         }
 
-        timer.scheduleAtFixedRate(1000, 500) {
+        timer.scheduleAtFixedRate(1000, 1_000) {
             updateOutputs()
         }
-        timer.scheduleAtFixedRate(1000, 500) {
+
+        timer.scheduleAtFixedRate(1000, 10_000) {
             updatePumps()
         }
 
-        timer.scheduleAtFixedRate(1000, 500) {
+        timer.scheduleAtFixedRate(1000, 5000) {
             if (state.takeImageNow) {
                 state.takeImageNow = false
                 captureImage()
@@ -58,7 +59,6 @@ class Manager(private val state: State) {
             captureImage()
         }
     }
-
 
     private fun updateAutomatic() {
         log.debug("updateAutomatic State <{}>", state)
@@ -80,7 +80,7 @@ class Manager(private val state: State) {
 
         lastPumpTimestamp = now
 
-        if (state.humiditySoil1 <= state.targetHumiditySoil1) {
+        if (state.humiditySoil1 > 0 && state.humiditySoil1 <= state.targetHumiditySoil1) {
             Thread {
                 state.pump1 = 1
                 log.info("Start Pump1 - State <{}>", state)
@@ -91,7 +91,7 @@ class Manager(private val state: State) {
             }.start()
         }
 
-        if (state.humiditySoil2 <= state.targetHumiditySoil2) {
+        if (state.humiditySoil2 > 0 && state.humiditySoil2 <= state.targetHumiditySoil2) {
             Thread {
                 state.pump2 = 1
                 log.info("Start Pump2 - State <{}>", state)

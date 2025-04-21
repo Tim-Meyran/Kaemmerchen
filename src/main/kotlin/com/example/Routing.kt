@@ -11,6 +11,11 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.time.Instant
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 
@@ -32,6 +37,88 @@ fun Application.configureRouting() {
     routing {
         get("/") {
             call.respond(ThymeleafContent("index", mapOf("git_version" to versionString)))
+        }
+
+        get("/plant1") {
+            val localDate = LocalDate.parse(state.plantDate1, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            val daysSince = ChronoUnit.DAYS.between(localDate, LocalDate.now())
+            val data = mapOf(
+                "plantId" to "1",
+                "name" to state.plantName1,
+                "desc" to state.plantDesc1,
+                "dateString" to "planted on ${state.plantDate1} - $daysSince days old",
+                "targetHumiditySoil" to "${state.targetHumiditySoil1}"
+            )
+            call.respond(ThymeleafContent("plant", data))
+        }
+
+        get("/plant2") {
+            val localDate = LocalDate.parse(state.plantDate2, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            val daysSince = ChronoUnit.DAYS.between(localDate, LocalDate.now())
+            val data = mapOf(
+                "plantId" to "2",
+                "name" to state.plantName2,
+                "desc" to state.plantDesc2,
+                "dateString" to "planted on ${state.plantDate2} - $daysSince days old",
+                "targetHumiditySoil" to "${state.targetHumiditySoil2}"
+            )
+            call.respond(ThymeleafContent("plant", data))
+        }
+
+        post("/plantConfig") {
+            val formParameters = call.receiveParameters()
+            println(formParameters)
+
+            val plantId = formParameters["plantId"]
+            val name = formParameters["name"] ?: "Plant Name"
+            val desc = formParameters["desc"] ?: "Plant desc"
+            val date = formParameters["date"] ?: Date.from(Instant.now()).toString()
+
+            if (plantId == null) {
+                call.respond(HttpStatusCode.BadRequest)
+                return@post
+            }
+
+            if (plantId == "1") {
+                state.plantName1 = name
+                state.plantDesc1 = desc
+                state.plantDate1 = date
+            } else if (plantId == "2") {
+                state.plantName2 = name
+                state.plantDesc2 = desc
+                state.plantDate2 = date
+            }
+
+            call.respondRedirect("plant$plantId")
+        }
+        get("/plantConfig") {
+            val plantParam: String? = call.parameters["plant"]
+            if (plantParam == null)
+                call.respond(HttpStatusCode.BadRequest)
+
+            if (plantParam.equals("1"))
+                call.respond(
+                    ThymeleafContent(
+                        "plantConfig", mapOf(
+                            "plantId" to "1",
+                            "name" to state.plantName1,
+                            "desc" to state.plantDesc1,
+                            "date" to state.plantDate1
+                        )
+                    )
+                )
+            else if (plantParam.equals("2"))
+                call.respond(
+                    ThymeleafContent(
+                        "plantConfig",
+                        mapOf(
+                            "plantId" to "2",
+                            "name" to state.plantName2,
+                            "desc" to state.plantDesc2,
+                            "date" to state.plantDate2
+                        )
+                    )
+                )
         }
 
         get("/webcam") {
