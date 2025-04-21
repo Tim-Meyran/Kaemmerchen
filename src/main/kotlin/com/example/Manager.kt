@@ -21,8 +21,8 @@ class Manager(private val state: State) {
     init {
         state.mistifier = 0
         state.light = 0
-        state.fan1 = 0
-        state.fan2 = 0
+        state.fan1 = 1
+        state.fan2 = 1
         state.pump1 = 0
         state.pump2 = 0
 
@@ -36,12 +36,12 @@ class Manager(private val state: State) {
             }
         }
 
-        timer.scheduleAtFixedRate(1000, 500) {
+        timer.scheduleAtFixedRate(5_000, 5_000) {
             updateAutomatic()
         }
 
-        timer.scheduleAtFixedRate(1000, 500) {
-            updateOutputs()
+        timer.scheduleAtFixedRate(2_000, 750) {
+            writeOutputs()
         }
         timer.scheduleAtFixedRate(1000, 500) {
             updatePumps()
@@ -54,20 +54,18 @@ class Manager(private val state: State) {
             }
         }
 
-        timer.scheduleAtFixedRate(1000, 30 * 60 * 1_000) {
+        timer.scheduleAtFixedRate(5*60_000, 30 * 60 * 1_000) {
             captureImage()
         }
     }
 
-
     private fun updateAutomatic() {
-        log.debug("updateAutomatic State <{}>", state)
         if (state.automaticMode == 0L) return
+        log.debug("updateAutomatic State <{}>", state)
 
         val currentDateTime = LocalDateTime.now()
         val oldLight = state.light
-        state.light =
-            if (currentDateTime.hour >= state.lightOnTime && currentDateTime.hour < state.lightOffTime) 1L else 0L
+        state.light = if (currentDateTime.hour >= state.lightOnTime && currentDateTime.hour < state.lightOffTime) 1L else 0L
         if (oldLight != state.light)
             log.info("update light - State <{}>", state)
     }
@@ -80,7 +78,7 @@ class Manager(private val state: State) {
 
         lastPumpTimestamp = now
 
-        if (state.humiditySoil1 <= state.targetHumiditySoil1) {
+        if (state.humiditySoil1 > 0 && state.humiditySoil1 <= state.targetHumiditySoil1) {
             Thread {
                 state.pump1 = 1
                 log.info("Start Pump1 - State <{}>", state)
@@ -91,7 +89,7 @@ class Manager(private val state: State) {
             }.start()
         }
 
-        if (state.humiditySoil2 <= state.targetHumiditySoil2) {
+        if (state.humiditySoil2 > 0 && state.humiditySoil2 <= state.targetHumiditySoil2) {
             Thread {
                 state.pump2 = 1
                 log.info("Start Pump2 - State <{}>", state)
@@ -107,12 +105,10 @@ class Manager(private val state: State) {
         state.setFromOtherState(newState)
     }
 
-    private fun updateOutputs() {
-        val now = System.currentTimeMillis()
-
+    private fun writeOutputs() {
+        //val now = System.currentTimeMillis()
         //println("Update $now")
         serialManager.writeOutputs(state)
-
         if (state.changed) {
             state.changed = false
         }
